@@ -1,0 +1,24 @@
+.card {
+    width: 170px;
+    min-height: 170px;
+    background: #393B3B;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px;
+    flex-direction: column;
+    transition: .1s;
+    img {
+        width: 70%;
+        height: 70%;
+        object-fit: cover;
+    }
+}
+
+
+.card:hover {
+    background-color: rgba(86, 86, 86, 0.637);
+
+}
+

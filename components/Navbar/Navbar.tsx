@@ -1,37 +1,22 @@
 'use client';
 import {
-  HoverCard,
   Group,
-  Button,
-  UnstyledButton,
-  Text,
-  SimpleGrid,
-  ThemeIcon,
-  Anchor,
   Divider,
-  Center,
   Box,
   Burger,
   Drawer,
-  Collapse,
   ScrollArea,
   rem,
   useMantineTheme,
   Image,
   Avatar,
+  Flex,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import {
-  IconNotification,
-  IconCode,
-  IconBook,
-  IconChartPie3,
-  IconFingerprint,
-  IconCoin,
-  IconChevronDown,
-} from '@tabler/icons-react';
 import classes from './Navbar.module.css';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
+import { IconSearch } from '@tabler/icons-react';
+import Link from 'next/link';
 
 export function Navbar() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
@@ -46,10 +31,13 @@ export function Navbar() {
             <Image src="./LOGO.png" alt="lol" width={23} height={23} />
           </Group>
 
-          <Group visibleFrom="sm">
+          <Flex visibleFrom="sm" align={'center'} justify={'center'} gap={30}>
+            <Link href={'/search'}>
+              <IconSearch />
+            </Link>
             <Avatar src="./default-avatar.jpg" alt="avatar" />
             <ThemeToggle />
-          </Group>
+          </Flex>
 
           <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
         </Group>
@@ -70,18 +58,6 @@ export function Navbar() {
           <a href="#" className={classes.link}>
             Home
           </a>
-          <UnstyledButton className={classes.link} onClick={toggleLinks}>
-            <Center inline>
-              <Box component="span" mr={5}>
-                Features
-              </Box>
-              <IconChevronDown
-                style={{ width: rem(16), height: rem(16) }}
-                color={theme.colors.blue[6]}
-              />
-            </Center>
-          </UnstyledButton>
-          {/* <Collapse in={linksOpened}>{links}</Collapse> */}
           <a href="#" className={classes.link}>
             Learn
           </a>

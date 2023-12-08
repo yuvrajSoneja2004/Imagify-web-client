@@ -1,0 +1,15 @@
+.grid {
+    display: grid;
+    grid-template-columns: 80px auto;
+}
+
+
+@media screen and (max-width: 457px) {
+ .sidebar {
+    display: none !important;
+ }
+
+ .grid {
+    grid-template-columns: auto !important;
+ }
+}

@@ -4,10 +4,10 @@ import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 import { theme } from '../theme';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { Navbar } from '@/components/Navbar/Navbar';
-
+import S from './global.module.css';
 export const metadata = {
-  title: 'Mantine Next.js template',
-  description: 'I am using Mantine with Next.js!',
+  title: 'Imagify - Talk to anyone!',
+  description: 'Inspired by https://beta.character.ai/',
 };
 
 export default function RootLayout({ children }: { children: any }) {
@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: any }) {
     <html lang="en">
       <head>
         <ColorSchemeScript />
-        <link rel="shortcut icon" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
@@ -24,8 +24,8 @@ export default function RootLayout({ children }: { children: any }) {
       <body>
         <div id="rootGrid">
           <MantineProvider theme={theme}>
-            <div style={{ display: 'grid', gridTemplateColumns: '6% auto' }}>
-              <div style={{ width: '400px !important' }}>
+            <div className={S.grid}>
+              <div className={S.sidebar}>
                 <Sidebar />
               </div>
               <div>
