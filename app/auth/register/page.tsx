@@ -1,7 +1,6 @@
 import {
   TextInput,
   PasswordInput,
-  Checkbox,
   Anchor,
   Paper,
   Title,
@@ -10,7 +9,7 @@ import {
   Group,
   Button,
 } from '@mantine/core';
-import classes from './AuthenticationTitle.module.css';
+import classes from './RegisterStyles.module.css';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -18,25 +17,25 @@ export default function LoginPage() {
     <div className={classes.bgWrapper}>
       <Container size={420} style={{ zIndex: 999 }}>
         <Title ta="center" c={'white'} className={classes.title}>
-          Welcome back!
+          Welcome to Imagify!
         </Title>
-        <Text c="grey" size="sm" ta="center" mt={5}>
-          Do not have an account yet?{' '}
-          <Link href={'/auth/register'} className={classes.anchor}>
-            Create account
+        <Text c="gray" size="sm" ta="center" mt={5}>
+          Already have an account?{' '}
+          <Link href={'/auth/login'} className={classes.anchor}>
+            Login
           </Link>
         </Text>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-          <TextInput label="Email" placeholder="you@mantine.dev" required />
+          <TextInput label="Nickname" placeholder="johe_doe" required />
+          <TextInput label="Email" placeholder="johndoe@gmail.dev" required mt="md" />
           <PasswordInput label="Password" placeholder="Your password" required mt="md" />
           <Group justify="space-between" mt="lg">
-            <Checkbox label="Remember me" />
             <Anchor component="button" size="sm">
               Forgot password?
             </Anchor>
           </Group>
           <Button fullWidth mt="xl">
-            Sign in
+            Register
           </Button>
         </Paper>
       </Container>

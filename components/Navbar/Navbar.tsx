@@ -42,10 +42,8 @@ export function Navbar() {
     <Box>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          {/* <MantineLogo size={30} /> */}
-
           <Group h="100%" gap={0} visibleFrom="sm">
-            {/* <Image src="./LOGO.png" alt="lol" width={23} height={23} /> */}
+            <Image src="./LOGO.png" alt="lol" width={23} height={23} />
           </Group>
 
           <Group visibleFrom="sm">
