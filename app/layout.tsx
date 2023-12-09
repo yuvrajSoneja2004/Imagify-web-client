@@ -5,6 +5,8 @@ import { theme } from '../theme';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { Navbar } from '@/components/Navbar/Navbar';
 import S from './global.module.css';
+import 'react-loading-skeleton/dist/skeleton.css';
+
 export const metadata = {
   title: 'Imagify - Talk to anyone!',
   description: 'Inspired by https://beta.character.ai/',
