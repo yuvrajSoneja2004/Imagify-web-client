@@ -23,7 +23,7 @@ function page({}: Props) {
   return (
     <Container pt={20} pb={20}>
       <Input
-        placeholder="Try 'Dynamic content here'"
+        lol="Try 'Dynamic content here'"
         rightSection={<IconSearch size={19} />}
         fz={20}
         onKeyDown={handleKeyPress}

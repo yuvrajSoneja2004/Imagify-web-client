@@ -1,0 +1,15 @@
+@media screen and (max-width: 843px) {
+    .responsive {
+        flex-direction: column !important;
+        justify-content: left !important;
+    }
+
+    .avatar {
+        margin-top: 15px;
+        margin-left: 15px;
+    }
+
+    .inputFile {
+        flex-direction: column !important;
+    }
+}

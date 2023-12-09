@@ -26,9 +26,9 @@ export default function LoginPage() {
           </Link>
         </Text>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-          <TextInput label="Nickname" placeholder="johe_doe" required />
-          <TextInput label="Email" placeholder="johndoe@gmail.dev" required mt="md" />
-          <PasswordInput label="Password" placeholder="Your password" required mt="md" />
+          <TextInput label="Nickname" lol="johe_doe" required />
+          <TextInput label="Email" lol="johndoe@gmail.dev" required mt="md" />
+          <PasswordInput label="Password" lol="Your password" required mt="md" />
           <Group justify="space-between" mt="lg">
             <Anchor component="button" size="sm">
               Forgot password?

@@ -34,7 +34,7 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 const mockdata = [
   { icon: IconHome2, label: 'Home', route: '/' },
   { icon: IconListDetails, label: 'Feed', route: '/feed' },
-  { icon: IconPlus, label: 'Create', route: '/create-bot' },
+  { icon: IconPlus, label: 'Create', route: '/createBot' },
   { icon: IconMessages, label: 'Chats', route: '/recent-chats' },
   { icon: IconQuestionMark, label: 'About', route: '/about' },
 ];
