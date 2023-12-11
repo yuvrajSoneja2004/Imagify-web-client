@@ -1,11 +1,12 @@
 import '@mantine/core/styles.css';
 import React from 'react';
-import { MantineProvider, ColorSchemeScript } from '@mantine/core';
+import { MantineProvider, ColorSchemeScript, Notification } from '@mantine/core';
 import { theme } from '../theme';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { Navbar } from '@/components/Navbar/Navbar';
 import S from './global.module.css';
 import 'react-loading-skeleton/dist/skeleton.css';
+import '@mantine/notifications/styles.css';
 
 export const metadata = {
   title: 'Imagify - Talk to anyone!',
@@ -26,6 +27,8 @@ export default function RootLayout({ children }: { children: any }) {
       <body>
         <div id="rootGrid">
           <MantineProvider theme={theme}>
+            {/* // TODO: Notifications component is not being showed on form handling FILE:  app/auth/register
+             */}
             <div className={S.grid}>
               <div className={S.sidebar}>
                 <Sidebar />

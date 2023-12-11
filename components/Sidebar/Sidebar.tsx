@@ -35,7 +35,7 @@ const mockdata = [
   { icon: IconHome2, label: 'Home', route: '/' },
   { icon: IconListDetails, label: 'Feed', route: '/feed' },
   { icon: IconPlus, label: 'Create', route: '/createBot' },
-  { icon: IconMessages, label: 'Chats', route: '/recent-chats' },
+  { icon: IconMessages, label: 'Chats', route: '/recentchats' },
   { icon: IconQuestionMark, label: 'About', route: '/about' },
 ];
 

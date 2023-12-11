@@ -1,12 +1,7 @@
 import ChatBody from '@/components/ChatBody/ChatBody';
+import Chatoptions from '@/utils/Chatoptions';
 import { Button, Container, Flex, Text } from '@mantine/core';
-import {
-  IconBrandHipchat,
-  IconDotsVertical,
-  IconHeart,
-  IconHeartFilled,
-  IconShare,
-} from '@tabler/icons-react';
+import { IconBrandHipchat, IconHeart, IconShare } from '@tabler/icons-react';
 import React from 'react';
 
 type Props = {
@@ -41,7 +36,8 @@ function page({ searchParams }: Props) {
         </Flex>
         <Flex align={'center'} gap={10}>
           <IconShare size={20} />
-          <IconDotsVertical size={20} />
+          {/* on utils.Chatoptions.tsx */}
+          <Chatoptions />
         </Flex>
       </Flex>
       {/* Chat Body  */}
