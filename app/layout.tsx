@@ -7,6 +7,7 @@ import { Navbar } from '@/components/Navbar/Navbar';
 import S from './global.module.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@mantine/notifications/styles.css';
+import { ReduxProvider } from '@/redux/features/provider';
 
 export const metadata = {
   title: 'Imagify - Talk to anyone!',
@@ -35,7 +36,7 @@ export default function RootLayout({ children }: { children: any }) {
               </div>
               <div>
                 <Navbar />
-                {children}
+                <ReduxProvider>{children}</ReduxProvider>
               </div>
             </div>
           </MantineProvider>
