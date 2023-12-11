@@ -14,10 +14,11 @@ interface IUser {
 }
 
 const userSchema = new Schema<IUser>({
-  username: { type: String, required: true, minlength: 3, maxlength: 20 },
+  username: { type: String, required: true, minlength: 3, maxlength: 20, unique: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  avatarUrl: { type: String },
+  avatarUrl: { type: String, default: '' },
+  recentChats: { type: Array, default: [] },
   createdCharacters: { type: Array, default: [] },
   following: { type: Array, default: [] },
   followers: { type: Array, default: [] },

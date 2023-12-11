@@ -16,18 +16,15 @@ import {
 import classes from './RegisterStyles.module.css';
 import Link from 'next/link';
 import axios from 'axios';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function RegisterPage() {
-  const [inputs, setInputs] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
+  const [spinner, setSpinner] = useState<Boolean>(false);
+  const navigate = useRouter();
   const handleForm = async (event: React.FormEvent) => {
     event.preventDefault();
-
+    setSpinner(true);
     try {
       const formData = new FormData(event.currentTarget);
       const username: string | null = formData.get('user-name') as string | null;
@@ -50,10 +47,12 @@ export default function RegisterPage() {
       console.log(data);
 
       if (data) {
-        redirect('/');
+        navigate.push('/auth/login');
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setSpinner(false);
     }
   };
 
@@ -90,7 +89,7 @@ export default function RegisterPage() {
               Forgot password?
             </Anchor>
           </Group>
-          <Button fullWidth mt="xl" type="submit">
+          <Button fullWidth mt="xl" type="submit" loading={spinner as boolean | undefined}>
             Register
           </Button>
         </Paper>
