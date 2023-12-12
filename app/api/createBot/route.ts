@@ -4,6 +4,29 @@ import { NextResponse } from 'next/server';
 
 connectToDB();
 
+
+export async function GET(req: Request, res: Response) {
+  try {
+    const characters = await Character.find({});
+
+    if (characters) {
+      return NextResponse.json(
+        {
+          res: true,
+          data: characters,
+        },
+        { status: 200 }
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({
+      res: false,
+      msg: error,
+    });
+  }
+}
+
 export async function POST(req: Request, res: Response) {
   // Extrating info from request body
   const { name, intro, avatar, anger, rudeness, kindness, excitement, createdBy } =

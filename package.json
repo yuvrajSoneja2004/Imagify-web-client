@@ -35,7 +35,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-loading-skeleton": "^3.3.1",
-    "react-redux": "^9.0.3"
+    "react-redux": "^9.0.3",
+    "react-responsive-carousel": "^3.2.23"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
