@@ -27,19 +27,21 @@ export default function RootLayout({ children }: { children: any }) {
       </head>
       <body>
         <div id="rootGrid">
-          <MantineProvider theme={theme}>
-            {/* // TODO: Notifications component is not being showed on form handling FILE:  app/auth/register
-             */}
-            <div className={S.grid}>
-              <div className={S.sidebar}>
-                <Sidebar />
+          <ReduxProvider>
+            <MantineProvider theme={theme}>
+              {/* // TODO: Notifications component is not being showed on form handling FILE:  app/auth/register
+               */}
+              <div className={S.grid}>
+                <div className={S.sidebar}>
+                  <Sidebar />
+                </div>
+                <div>
+                  <Navbar />
+                  {children}
+                </div>
               </div>
-              <div>
-                <Navbar />
-                <ReduxProvider>{children}</ReduxProvider>
-              </div>
-            </div>
-          </MantineProvider>
+            </MantineProvider>
+          </ReduxProvider>
         </div>
       </body>
     </html>

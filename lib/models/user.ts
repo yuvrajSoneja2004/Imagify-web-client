@@ -1,4 +1,6 @@
 import { Schema, Document, model, models } from 'mongoose';
+import fs from 'fs';
+import { readImg } from '../static/readImg';
 
 interface IUser {
   username: string;
@@ -13,11 +15,13 @@ interface IUser {
   createdAt: Date;
 }
 
+// Default User Avatar
+const defaultAvatar = readImg();
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true, minlength: 3, maxlength: 20, unique: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  avatarUrl: { type: String, default: '' },
+  avatarUrl: { type: String, default: `${defaultAvatar}` },
   recentChats: { type: Array, default: [] },
   createdCharacters: { type: Array, default: [] },
   following: { type: Array, default: [] },

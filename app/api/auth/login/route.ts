@@ -1,7 +1,10 @@
 import UserModel from '@/lib/models/user';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
+import { connectToDB } from '@/lib/connect-db';
+import { readImg } from '@/lib/static/readImg';
 
+connectToDB();
 export async function POST(req: Request, res: Response) {
   try {
     // Extrating info from request body
@@ -38,6 +41,7 @@ export async function POST(req: Request, res: Response) {
         {
           res: true,
           data: user,
+          base: readImg(),
         },
         { status: 200 }
       );

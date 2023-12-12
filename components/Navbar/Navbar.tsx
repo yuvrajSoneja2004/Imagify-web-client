@@ -11,17 +11,21 @@ import {
   Image,
   Avatar,
   Flex,
+  Text,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './Navbar.module.css';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { IconSearch } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useAppSelector } from '@/redux/store';
 
 export function Navbar() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
-  const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
-  const theme = useMantineTheme();
+
+  const avatar = useAppSelector((state) => state.authSlice.value.avatarURI);
+  // For now
+  const username = useAppSelector((state) => state.authSlice.value.username);
 
   return (
     <Box>
@@ -30,12 +34,12 @@ export function Navbar() {
           <Group h="100%" gap={0} visibleFrom="sm">
             <Image src="./LOGO.png" alt="lol" width={23} height={23} />
           </Group>
-
           <Flex visibleFrom="sm" align={'center'} justify={'center'} gap={30}>
             <Link href={'/search'}>
               <IconSearch />
             </Link>
-            <Avatar src="./default-avatar.jpg" alt="avatar" />
+            <Text>{username}</Text>
+            <Avatar src={avatar ? avatar : ''} alt="avatar" />
             <ThemeToggle />
           </Flex>
 

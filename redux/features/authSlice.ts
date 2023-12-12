@@ -16,7 +16,11 @@ let initialState = {
     isAuthenticated: false,
     userid: null,
     username: '',
+    email: '',
     avatarURI: '',
+    followers: [],
+    following: 0,
+    bio: '',
   } as AuthState,
 } as InitialState;
 
@@ -24,11 +28,18 @@ export const auth = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<string>) {
+    login(state, action) {
+      console.log('this is payload', action.payload);
+      const { _id, username, followers, following, bio, email } = action.payload;
       return {
         value: {
           isAuthenticated: true,
-          username: state.username,
+          userid: _id,
+          username,
+          followers,
+          following,
+          bio,
+          email,
         },
       };
     },
