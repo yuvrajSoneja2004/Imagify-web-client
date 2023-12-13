@@ -1,28 +1,94 @@
-import { ActionIcon, Box, TextInput, rem } from '@mantine/core';
+'use client';
+import { useChatScroll } from '@/hooks/useChatScroll';
+import { ActionIcon, Avatar, Box, Flex, Stack, Text, TextInput, rem } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { IconArrowRight, IconSend, IconSendOff } from '@tabler/icons-react';
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 
-type Props = {};
+type Props = {
+  params: {
+    id: string;
+  };
+};
 
-function ChatBody({}: Props) {
+function ChatBody({ params }: Props) {
+  const [textInput, setTextInput] = useState<String>('');
+  const [isBeingSent, setIsBeingSent] = useState<boolean>(false);
+  const [chats, setChats] = useState([]);
+  const [isFirstMessage, setIsFirstMessage] = useState<boolean>(true);
+  const ref = useChatScroll(chats);
+
+  const checkEnterKey = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSend();
+    }
+  };
+
+  const handleSend = async () => {
+    setIsBeingSent(true);
+    setTextInput('');
+    try {
+      if (textInput.length === 0) {
+        alert('Dont send empty text');
+      }
+      const { data } = await axios.post('/api/chat', {
+        reqMsg: textInput,
+        characterID: params?.id,
+        isFirstMSG: isFirstMessage,
+      });
+      if (data?.res) {
+        setIsFirstMessage(false);
+        const { responseGPT } = data;
+        console.log(responseGPT);
+        setChats((prev) => [...prev, responseGPT]);
+      }
+    } catch (error) {
+    } finally {
+      setIsBeingSent(false);
+    }
+  };
+
   return (
-    <Box>
-      <Box mt={15} h={400} style={{ overflowY: 'scroll' }}>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur repudiandae corrupti
-        repellat impedit voluptate officia magnam maiores possimus ipsa accusantium? Assumenda sit
-        exercitationem iste sint quaerat obcaecati amet dolor sed odit corporis! Molestiae
-        asperiores laudaolorem! Sed esse expedita, ex tempore sunt, consequuntur repellendus odio
-        facilis sint est inventore. Porro tenetur eaque nisi animi amet repellendus et incidunt
-        voluptas suscipit veritatis. Ducimus iusto accusantium eius numquam alias.
-      </Box>
+    <Box ref={ref}>
+      <Stack mt={15} h={400} style={{ overflowY: 'scroll' }} gap={30}>
+        {chats.map((chat, index) => {
+          const {
+            msg,
+            character: { cName, cAvatar },
+          } = chat;
+
+          return (
+            <Flex key={index} align={'start'} gap={10}>
+              <Avatar src={cAvatar} alt="character-avatar" size={40} />
+              <Flex direction={'column'}>
+                <Text fw={'bold'}>{cName}</Text>
+                <Text>{msg}</Text>
+              </Flex>
+            </Flex>
+          );
+        })}
+      </Stack>
       <TextInput
         mt={15}
         radius="xl"
         size="md"
         placeholder="Type a message"
         rightSectionWidth={42}
+        onKeyDown={checkEnterKey}
+        onChange={(e) => {
+          setTextInput(e.target.value);
+        }}
+        value={textInput as string}
         rightSection={
-          <ActionIcon size={32} radius="xl" color={'blue'} variant="filled">
+          <ActionIcon
+            size={32}
+            radius="xl"
+            color={'blue'}
+            variant="filled"
+            onClick={handleSend}
+            loading={isBeingSent}
+          >
             <IconSend style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
           </ActionIcon>
         }

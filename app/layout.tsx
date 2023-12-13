@@ -8,7 +8,8 @@ import S from './global.module.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@mantine/notifications/styles.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { ReduxProvider } from '@/redux/features/provider';
+import { ReduxProvider } from '@/redux/features/provider'
+import '@mantine/carousel/styles.css';;
 
 export const metadata = {
   title: 'Imagify - Talk to anyone!',

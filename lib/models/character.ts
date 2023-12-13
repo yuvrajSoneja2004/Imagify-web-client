@@ -17,7 +17,7 @@ interface ICharacter extends Document {
 
 // Define the Character schema
 const characterSchema = new Schema<ICharacter>({
-  name: { type: String, default: 'NOT_SPECIFIED', required: true, minlength: 1, maxlength: 20 },
+  name: { type: String, default: 'NOT_SPECIFIED', required: true },
   greeting: {
     type: String,
     default: 'NOT_SPECIFIED',
