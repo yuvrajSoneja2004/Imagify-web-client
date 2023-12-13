@@ -1,4 +1,9 @@
 'use client';
+// Importing required modules and components
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useAppSelector } from '@/redux/store';
 import {
   Avatar,
   Box,
@@ -6,7 +11,6 @@ import {
   Center,
   FileInput,
   Flex,
-  RangeSlider,
   Slider,
   Stack,
   Text,
@@ -25,39 +29,47 @@ import {
   IconUser,
   IconUserCircle,
 } from '@tabler/icons-react';
-import React, { useEffect, useState } from 'react';
+
+// Importing local styles
 import S from './styles.module.css';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { useAppSelector } from '@/redux/store';
+
+// Type definition for component props
 type Props = {};
 
-function page({}: Props) {
-  const [spinner, setSpinner] = useState<Boolean>(false);
-  const navigate = useRouter();
+// Functional component for the character creation page
+function CharacterCreationPage({}: Props) {
+  // State variables
+  const [spinner, setSpinner] = useState<boolean>(false);
+  const [fileSpinner, setFileSpinner] = useState<boolean>(false);
+  const [renderController, setRenderController] = useState<number>(1);
+  const [base64String, setBase64String] = useState<string>('');
 
-  const [fileSpinner, setFileSpinner] = useState<Boolean>(false);
-  const [renderController, setRenderController] = useState(1);
-
-  const [base64String, setBase64String] = useState('');
-
+  // Redux hook to get the current user
   const currentUser = useAppSelector((state) => state.authSlice.value);
 
+  // Next.js router hook
+  const navigate = useRouter();
+
+  // Handler for file input change
   const handleFile = async (files: File[]) => {
     const file = files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64Result = reader.result as string;
+        setBase64String(base64Result);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  // Handler for form submission
   const handleForm = async (event: React.FormEvent) => {
     event.preventDefault();
     setSpinner(true);
+
     try {
+      // Extracting form data
       const formData = new FormData(event.currentTarget);
       const name: string | null = formData.get('character-name') as string | null;
       const intro: string | null = formData.get('character-intro') as string | null;
@@ -65,13 +77,12 @@ function page({}: Props) {
       const anger: string | null = formData.get('character-anger') as string | null;
       const rudeness: string | null = formData.get('character-rudeness') as string | null;
       const kindness: string | null = formData.get('character-kindness') as string | null;
-      const excitement: string | null = formData.get('character-excitment') as string | null;
+      const excitement: string | null = formData.get('character-excitement') as string | null;
 
       // Convert avatar file to base64
       if (avatar) {
         setBase64String(await convertFileToBase64(avatar));
       }
-      console.log(name, intro, base64String, rudeness, anger, kindness, excitement);
 
       // Sending data to server
       const { data } = await axios.post('/api/createBot', {
@@ -84,18 +95,19 @@ function page({}: Props) {
         excitement,
         createdBy: currentUser,
       });
-      console.log(data);
 
+      // Redirect on success
       if (data?.res) {
         navigate.push('/');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setSpinner(false);
     }
   };
 
+  // Utility function to convert a file to base64
   const convertFileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -107,6 +119,7 @@ function page({}: Props) {
     });
   };
 
+  // JSX structure for the component
   return (
     <form onSubmit={handleForm}>
       <Box p={20}>
@@ -114,8 +127,8 @@ function page({}: Props) {
           <IconMan size={30} />
           <Title fw={'bold'}>Create a Character!</Title>
         </Flex>
-        {/* Inputs starts from here  */}
-        {/* Name  */}
+
+        {/* Name Input */}
         <Box mt={40}>
           <Flex align={'center'} gap={8}>
             <Center w={40} h={40} bg={'#2C3C49'} style={{ borderRadius: '7px' }}>
@@ -128,7 +141,8 @@ function page({}: Props) {
           </Text>
           <TextInput placeholder="eg: Saitama" name="character-name" required />
         </Box>
-        {/* Greeting */}
+
+        {/* Greeting Input */}
         <Box mt={30}>
           <Flex align={'center'} gap={8}>
             <Center w={40} h={40} bg={'#2C3C49'} style={{ borderRadius: '7px' }}>
@@ -141,12 +155,13 @@ function page({}: Props) {
             "Mujhe babita ji pasand hai aur mujhe jelebi phapdha khana pasand hai".
           </Text>
           <Textarea
-            placeholder="eg: Sup man! I like potatos"
+            placeholder="eg: Sup man! I like potatoes"
             rows={6}
             name="character-intro"
             required
           />
         </Box>
+
         {/* Avatar Selection */}
         <Flex align={'center'} justify={'space-between'} className={S.responsive}>
           <Box mt={30}>
@@ -158,11 +173,11 @@ function page({}: Props) {
             </Flex>
             <Text c={'dimmed'} fz={13} mb={5} mt={3}>
               You can either let this app choose the avatar for you based on the name or you can
-              select avatar from the system.
+              select an avatar from the system.
             </Text>
             <Flex align={'center'} gap={15} mt={15} className={S.inputFile}>
               <Button leftSection={<IconCircleCheck size={20} />} loading={fileSpinner as boolean}>
-                Let the app select picture for you.
+                Let the app select a picture for you.
               </Button>
               <Text>OR</Text>
               <FileInput
@@ -174,7 +189,8 @@ function page({}: Props) {
           </Box>
           <Avatar size={90} className={S.avatar} src={base64String} key={renderController} />
         </Flex>
-        {/* Emotions  */}
+
+        {/* Emotions Input */}
         <Box mt={30}>
           <Flex align={'center'} gap={8}>
             <Center w={40} h={40} bg={'#2C3C49'} style={{ borderRadius: '7px' }}>
@@ -184,7 +200,7 @@ function page({}: Props) {
           </Flex>
           <Text c={'dimmed'} fz={13} mb={5} mt={3}>
             The character will dynamically respond and engage with the user, tailoring its reactions
-            and dialogue in accordance with the specified levels of emotions.{' '}
+            and dialogue in accordance with the specified levels of emotions.
           </Text>
           <Stack w={200} mt={20}>
             <Box>
@@ -220,12 +236,13 @@ function page({}: Props) {
                 defaultValue={40}
                 label={(value) => `${value} %`}
                 mt={5}
-                name="character-excitment"
+                name="character-excitement"
               />
             </Box>
           </Stack>
         </Box>
-        {/* Create bot  */}
+
+        {/* Create bot Button */}
         <Flex w={'100%'} justify={'end'} mt={20}>
           <Button leftSection={<IconRobot size={20} />} type="submit" loading={spinner as boolean}>
             Create Character!
@@ -236,4 +253,4 @@ function page({}: Props) {
   );
 }
 
-export default page;
+export default CharacterCreationPage;

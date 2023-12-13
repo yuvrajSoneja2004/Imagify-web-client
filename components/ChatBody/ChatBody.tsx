@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 
 type Props = {
   params: {
-    id: string;
+    id: number;
   };
 };
 

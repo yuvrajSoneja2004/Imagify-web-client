@@ -1,6 +1,7 @@
 'use client';
-import ChatBody from '@/components/ChatBody/ChatBody';
-import Chatoptions from '@/utils/Chatoptions';
+// Importing required modules and components
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import {
   Avatar,
   Box,
@@ -15,27 +16,36 @@ import {
   em,
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import {
-  IconBrandHipchat,
-  IconChartPie4,
-  IconFriends,
-  IconHeart,
-  IconShare,
-} from '@tabler/icons-react';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { IconBrandHipchat, IconFriends, IconHeart, IconShare } from '@tabler/icons-react';
+import ChatBody from '@/components/ChatBody/ChatBody';
+import Chatoptions from '@/utils/Chatoptions';
 
-type Props = {
+// Type definition for character information
+interface CharacterInfo {
+  avatar: string;
+  name: string;
+  currentlyOnline: string;
+  createdBy: {
+    username: string;
+  };
+  likes: number;
+}
+
+// Type definition for component props
+interface Props {
   searchParams: {
     id: number;
   };
-};
+}
 
-function page({ searchParams }: Props) {
+// Functional component for the chat page
+function ChatPage({ searchParams }: Props) {
+  // State and hook variables
   const [opened, { open, close }] = useDisclosure(false);
-  const [characterInfo, setCharacterInfo] = useState([]);
+  const [characterInfo, setCharacterInfo] = useState<CharacterInfo | null>(null);
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
+  // Function to fetch data
   const getData = async () => {
     try {
       const { data } = await axios.get(`/api/chat?id=${searchParams?.id}`);
@@ -47,16 +57,19 @@ function page({ searchParams }: Props) {
 
       console.log(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
+  // useEffect hook to fetch data on component mount
   useEffect(() => {
     getData();
-  }, []);
+  }, [searchParams?.id]);
 
+  // JSX structure for the component
   return (
     <Container mt={20} mb={20}>
+      {/* Share Modal */}
       <Modal
         opened={opened}
         onClose={close}
@@ -70,7 +83,7 @@ function page({ searchParams }: Props) {
         size={'lg'}
       >
         <Text>
-          This will <strong>not share</strong> your convertions
+          This will <strong>not share</strong> your conversations.
         </Text>
         <Center pt={20} pb={20}>
           <Flex align={'center'} gap={10} direction={!isMobile ? 'row' : 'column'}>
@@ -80,13 +93,15 @@ function page({ searchParams }: Props) {
             <CopyButton value={window.location.href}>
               {({ copied, copy }) => (
                 <Button color={copied ? 'teal' : 'blue'} onClick={copy}>
-                  {copied ? 'Copied url' : 'Copy url'}
+                  {copied ? 'Copied URL' : 'Copy URL'}
                 </Button>
               )}
             </CopyButton>
           </Flex>
         </Center>
       </Modal>
+
+      {/* Character Information Section */}
       <Flex align={'start'} justify={'space-between'}>
         <Flex direction={'column'}>
           <Flex align={'center'} gap={10}>
@@ -112,16 +127,18 @@ function page({ searchParams }: Props) {
             {characterInfo?.likes}
           </Button>
         </Flex>
+
+        {/* Share and Chat options Section */}
         <Flex align={'center'} gap={10}>
           <IconShare size={20} onClick={open} cursor={'pointer'} />
-          {/* on utils.Chatoptions.tsx */}
           <Chatoptions />
         </Flex>
       </Flex>
-      {/* Chat Body  */}
+
+      {/* Chat Body Section */}
       <ChatBody params={searchParams} />
     </Container>
   );
 }
 
-export default page;
+export default ChatPage;
