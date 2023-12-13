@@ -148,7 +148,6 @@ function page({}: Props) {
           />
         </Box>
         {/* Avatar Selection */}
-        <img src={base64String} alt="Selected Avatar" />
         <Flex align={'center'} justify={'space-between'} className={S.responsive}>
           <Box mt={30}>
             <Flex align={'center'} gap={8}>

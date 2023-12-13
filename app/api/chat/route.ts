@@ -1,9 +1,7 @@
 import { connectToDB } from '@/lib/connect-db';
 import Character from '@/lib/models/character';
 import { NextResponse } from 'next/server';
-
 import OpenAI from 'openai';
-let isFirst = false;
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,6 +9,25 @@ const openai = new OpenAI({
 
 export async function GET(req: Request, res: Response) {
   connectToDB();
+  try {
+    const url = new URL(req.url);
+    const id = url.searchParams.get('id')?.toString();
+    const character = await Character.findById(id);
+
+    return NextResponse.json(
+      {
+        res: true,
+        charData: character,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({
+      res: false,
+      msg: error,
+    });
+  }
 }
 export async function POST(req: Request, res: Response) {
   connectToDB();
