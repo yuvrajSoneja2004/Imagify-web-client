@@ -9,6 +9,7 @@ type AuthState = {
   userid: null | string;
   username: string;
   avatarURI: string;
+  recentChats: any[];
 };
 
 let initialState = {
@@ -21,6 +22,7 @@ let initialState = {
     followers: [],
     following: 0,
     bio: '',
+    recentChats: [],
   } as AuthState,
 } as InitialState;
 
@@ -30,7 +32,7 @@ export const auth = createSlice({
   reducers: {
     login(state, action) {
       console.log('this is payload', action.payload);
-      const { _id, username, followers, following, bio, email } = action.payload;
+      const { _id, username, followers, following, bio, email, recentChats } = action.payload;
       return {
         value: {
           isAuthenticated: true,
@@ -40,6 +42,7 @@ export const auth = createSlice({
           following,
           bio,
           email,
+          recentChats,
         },
       };
     },

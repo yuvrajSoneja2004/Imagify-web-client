@@ -1,8 +1,10 @@
+'use client';
 import React from 'react';
 import S from './RecentChat.module.css';
 import Image from 'next/image';
 import { Text } from '@mantine/core';
 import { useRouter } from 'next/navigation';
+import { useAppSelector } from '@/redux/store';
 
 type Props = {
   info: {

@@ -10,6 +10,7 @@ import {
   Container,
   CopyButton,
   Flex,
+  Loader,
   Modal,
   Text,
   Title,
@@ -19,6 +20,7 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { IconBrandHipchat, IconFriends, IconHeart, IconShare } from '@tabler/icons-react';
 import ChatBody from '@/components/ChatBody/ChatBody';
 import Chatoptions from '@/utils/Chatoptions';
+import { useAppSelector } from '@/redux/store';
 
 // Type definition for character information
 interface CharacterInfo {
@@ -43,7 +45,11 @@ function ChatPage({ searchParams }: Props) {
   // State and hook variables
   const [opened, { open, close }] = useDisclosure(false);
   const [characterInfo, setCharacterInfo] = useState<CharacterInfo | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false);
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
+
+  const userID = useAppSelector((state) => state.authSlice.value.userid);
 
   // Function to fetch data
   const getData = async () => {
@@ -61,10 +67,33 @@ function ChatPage({ searchParams }: Props) {
     }
   };
 
+  // Function to Like / Unlike bot
+  const handleLike = async () => {
+    setIsLikeLoading(true);
+    try {
+      const { data } = await axios.post(`/api/like`, {
+        userId: userID,
+        botId: searchParams?.id,
+      });
+      console.log(data);
+
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLikeLoading(false);
+    }
+  };
+
   // useEffect hook to fetch data on component mount
   useEffect(() => {
     getData();
   }, [searchParams?.id]);
+
+  // return loading component if server is yet to respond
+  if (isLoading) {
+    return <Loader color="blue" />;
+  }
 
   // JSX structure for the component
   return (
@@ -123,7 +152,14 @@ function ChatPage({ searchParams }: Props) {
                 : characterInfo?.createdBy?.username}
             </Text>
           </Flex>
-          <Button variant="outline" leftSection={<IconHeart size={20} />} w={90} mt={15}>
+          <Button
+            variant="outline"
+            leftSection={<IconHeart size={20} />}
+            w={90}
+            mt={15}
+            loading={isLikeLoading}
+            onClick={handleLike}
+          >
             {characterInfo?.likes}
           </Button>
         </Flex>

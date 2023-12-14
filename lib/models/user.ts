@@ -12,6 +12,7 @@ interface IUser {
   followers: any[];
   bio?: string;
   posts: any[];
+  recentChats: any[];
   createdAt: Date;
 }
 
@@ -28,6 +29,7 @@ const userSchema = new Schema<IUser>({
   followers: { type: Array, default: [] },
   bio: { type: String, default: 'Hey, I like Imagify!', minlength: 0, maxlength: 500 },
   posts: { type: [Schema.Types.Mixed], default: [] },
+  recentChats: { type: [Schema.Types.Mixed], default: [] },
   createdAt: { type: Date, default: Date.now },
 });
 
