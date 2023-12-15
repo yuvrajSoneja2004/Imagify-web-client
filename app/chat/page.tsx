@@ -101,10 +101,28 @@ function ChatPage({ searchParams }: Props) {
     }
   };
 
+  const addHistory = async () => {
+    try {
+      const { data } = await axios.post('/api/addHistory', {
+        userId: userID,
+        botInfo: {
+          botId: searchParams?.id,
+          botName: characterInfo?.name,
+          botAvatar: characterInfo?.avatar,
+        },
+      });
+
+      console.log(data, 'history');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // useEffect hook to fetch data on component mount
   useEffect(() => {
     getData();
     addView();
+    addHistory();
   }, [searchParams?.id]);
 
   // return loading component if server is yet to respond

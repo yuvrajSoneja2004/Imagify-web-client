@@ -2,14 +2,32 @@
 import { useAppSelector } from '@/redux/store';
 import { Avatar, Box, Button, Flex, Stack, Text } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
+import axios from 'axios';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 type Props = {};
 
 function page({}: Props) {
-  const recentChats = useAppSelector((state) => state.authSlice.value.recentChats);
-  console.log(recentChats, 'this is the recent chat');
+  const userID = useAppSelector((state) => state.authSlice.value.userid);
+  const [historyList, setHistoryList] = useState([]);
+
+  const getHistory = async () => {
+    try {
+      const { data } = await axios.get(`/api/addHistory?id=${userID}`);
+
+      console.log(data);
+      if (data?.res) {
+        setHistoryList(data?.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getHistory();
+  }, []);
   return (
     <Box p={20}>
       <Flex align={'center'} gap={15}>
@@ -22,14 +40,17 @@ function page({}: Props) {
       </Flex>
       {/* List of recent conversations (get data via API) */}
       <Stack mt={20}>
-        {recentChats.length === 0
+        {historyList.length === 0
           ? 'No recent conversations'
-          : recentChats.map((chat, index) => {
+          : historyList.map((profile: { charId: string }, index) => {
               return (
-                <Link href={`/chat?id=123`} style={{ textDecoration: 'none', color: '#fff' }}>
+                <Link
+                  href={`/chat?id=${profile?.charId}`}
+                  style={{ textDecoration: 'none', color: '#fff' }}
+                >
                   <Flex align={'start'} gap={10}>
-                    <Avatar size={55} />
-                    <Text fw={500}>Elon Musk</Text>
+                    <Avatar size={55} src={profile?.charAvatar} />
+                    <Text fw={500}>{profile?.charName}</Text>
                   </Flex>
                 </Link>
               );
