@@ -88,9 +88,23 @@ function ChatPage({ searchParams }: Props) {
     }
   };
 
+  const addView = async () => {
+    try {
+      const { data } = await axios.post('/api/addView', {
+        userId: userID,
+        botId: searchParams?.id,
+      });
+
+      console.log(data, 'views');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // useEffect hook to fetch data on component mount
   useEffect(() => {
     getData();
+    addView();
   }, [searchParams?.id]);
 
   // return loading component if server is yet to respond
@@ -141,7 +155,7 @@ function ChatPage({ searchParams }: Props) {
             <Text fw={'bold'}>{characterInfo?.name}</Text>
             <Flex align={'center'}>
               <IconBrandHipchat size={14} />
-              <Text ml={2}>{characterInfo?.currentlyOnline}</Text>
+              <Text ml={2}>{characterInfo?.views?.length}</Text>
             </Flex>
           </Flex>
           <Flex align={'center'} gap={6}>

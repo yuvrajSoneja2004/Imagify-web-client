@@ -12,6 +12,7 @@ interface ICharacter extends Document {
   createdAt: Date;
   createdBy: object;
   likes: any[];
+  views: any[];
   currentlyOnline: number;
 }
 
@@ -33,9 +34,8 @@ const characterSchema = new Schema<ICharacter>({
   createdAt: { type: Date, default: Date.now() },
   createdBy: { type: Object, default: {}, required: true },
   likes: { type: Array, default: [] },
-  liked: { type: Array, default: [] },
   conversationHistory: { type: Array, default: [] },
-  views: { type: Number, default: 0 },
+  views: { type: Array, default: [] },
   currentlyOnline: { type: Number, default: 0 },
 });
 
