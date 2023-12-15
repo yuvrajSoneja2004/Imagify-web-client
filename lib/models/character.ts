@@ -34,6 +34,7 @@ const characterSchema = new Schema<ICharacter>({
   createdBy: { type: Object, default: {}, required: true },
   likes: { type: Array, default: [] },
   liked: { type: Array, default: [] },
+  conversationHistory: { type: Array, default: [] },
   views: { type: Number, default: 0 },
   currentlyOnline: { type: Number, default: 0 },
 });

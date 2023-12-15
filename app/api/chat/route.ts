@@ -32,8 +32,16 @@ export async function GET(req: Request, res: Response) {
 export async function POST(req: Request, res: Response) {
   connectToDB();
   const { reqMsg, characterID, isFirstMSG } = await req.json();
-  const { name, greeting, rudeness, anger, excitement, avatar } =
-    await Character.findById(characterID);
+  const { name, greeting, rudeness, anger, excitement, avatar } = (await Character.findById(
+    characterID
+  )) as {
+    name: string;
+    greeting: string;
+    rudeness: number;
+    anger: number;
+    excitement: number;
+    avatar: string;
+  };
   console.log(name, greeting);
 
   const PROMPT_TEMPLATE = `

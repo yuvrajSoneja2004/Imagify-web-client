@@ -1,21 +1,58 @@
+// Import necessary modules and models
 import { connectToDB } from '@/lib/connect-db';
 import Character from '@/lib/models/character';
 import UserModel from '@/lib/models/user';
 import { NextResponse } from 'next/server';
 
+// Define the function to handle POST requests
 export async function POST(req: Request, res: Response) {
+  // Connect to the database
   connectToDB();
+
   try {
+    // Extract userId and botId from the request's JSON payload
     const { userId, botId } = await req.json();
 
+    // Check if userId and botId are provided
     if (!userId || !botId) {
-      console.log('Error: Invalid userid or botid');
+      console.log('Provide userId and botId');
     }
-    const user = await UserModel.findById(userId);
-    const bot = await UserModel.findById(botId);
 
-    if (!user || !bot) {
-      console.log('Error: user or bot not found');
+    // Find the bot in the database based on the provided botId
+    const [bot] = await Character.find({ _id: botId });
+
+    if (bot.likes.includes(userId)) {
+      return NextResponse.json(
+        {
+          res: false,
+          msg: 'User already liked',
+        },
+        { status: 400 }
+      );
     }
-  } catch (error) {}
+
+    // Add the userId to the bot's likes array
+    bot.likes.push(userId);
+
+    // Save the updated bot in the database
+    await bot.save();
+
+    // Return a JSON response indicating success
+    return NextResponse.json(
+      {
+        res: true,
+        msg: 'Like updated successfully',
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    // If an error occurs, return a JSON response with the error message
+    return NextResponse.json(
+      {
+        res: false,
+        msg: error,
+      },
+      { status: 500 }
+    );
+  }
 }

@@ -48,6 +48,7 @@ function ChatPage({ searchParams }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false);
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
+  const [clientSideLikes, setClientSideLikes] = useState([]);
 
   const userID = useAppSelector((state) => state.authSlice.value.userid);
 
@@ -58,6 +59,7 @@ function ChatPage({ searchParams }: Props) {
 
       if (data?.res) {
         const { charData } = data;
+        setClientSideLikes(charData?.likes?.length);
         setCharacterInfo(charData);
       }
 
@@ -75,9 +77,10 @@ function ChatPage({ searchParams }: Props) {
         userId: userID,
         botId: searchParams?.id,
       });
-      console.log(data);
 
-      console.log(data);
+      if (data?.res) {
+        setClientSideLikes((prev) => prev + 1);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -160,7 +163,7 @@ function ChatPage({ searchParams }: Props) {
             loading={isLikeLoading}
             onClick={handleLike}
           >
-            {characterInfo?.likes}
+            {clientSideLikes}
           </Button>
         </Flex>
 
