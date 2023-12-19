@@ -3,18 +3,37 @@ import S from './CharacterCard.module.css';
 import { Flex, Menu, Select, Text } from '@mantine/core';
 import { IconBrandWechat, IconDotsVertical } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-type Props = {};
+type Props = {
+  info: any;
+};
 
-function CharacterCard({}: Props) {
+function CharacterCard({ info }: Props) {
+  const navigate = useRouter();
+  const {
+    _id,
+    avatar,
+    name,
+    createdBy: { username },
+    likes,
+  } = info;
   return (
-    <div className={S.card}>
+    <div
+      className={S.card}
+      onClick={() => {
+        navigate.push(`/chat?id=${_id}`);
+      }}
+    >
       <img
-        src="https://characterai.io/i/400/static/avatars/uploaded/2022/10/6/qHO2fZ4bR4wEx6I2DgrwrfVb1z8KtKZviuQ6lPqCN_w.webp"
+        src={avatar}
         alt="lol"
         style={{ borderRadius: '15px' }}
+        onError={(e) => {
+          e.target.src = 'http://via.placeholder.com/99x99'; // Fallback image URL
+        }}
       />
-      <Text fw={700}>Saitama</Text>
+      <Text fw={700}>{name === '' ? 'NOT_DEFINED' : name}</Text>
       <Text fz={13} lh={1} mt={8}>
         Hey , i am just a hero for fun
       </Text>
@@ -24,7 +43,7 @@ function CharacterCard({}: Props) {
             href={'/creator/:id'}
             style={{ textDecoration: 'none', color: 'white', opacity: '.4' }}
           >
-            @creator
+            @{username}
           </Link>
         </Text>
         <Flex align={'center'} gap={8}>

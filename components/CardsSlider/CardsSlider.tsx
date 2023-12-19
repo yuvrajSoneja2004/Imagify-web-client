@@ -76,7 +76,15 @@ function CardsCarousel() {
       <Text fw={500} lts={0.2} mb={20} mt={20}>
         Recommended
       </Text>
-      <CharacterCard />
+      <div>
+        {isLoading
+          ? LOADER_ARRAY.map((_, index) => (
+              <Box pl={10} pr={10}>
+                <ContinueChatSkeletion key={index} />
+              </Box>
+            ))
+          : data.map((item, index) => <CharacterCard info={item} />)}
+      </div>
     </Box>
   );
 }

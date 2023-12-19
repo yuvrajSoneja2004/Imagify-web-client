@@ -19,11 +19,11 @@ import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { IconSearch } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useAppSelector } from '@/redux/store';
+import ProfileOptions from '@/utils/ProfileOptions';
 
 export function Navbar() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
 
-  const avatar = useAppSelector((state) => state.authSlice.value.avatarURI);
   // For now
   const username = useAppSelector((state) => state.authSlice.value.username);
 
@@ -39,7 +39,7 @@ export function Navbar() {
               <IconSearch />
             </Link>
             <Text>{username}</Text>
-            <Avatar src={avatar ? avatar : ''} alt="avatar" />
+            <ProfileOptions />
             <ThemeToggle />
           </Flex>
 
