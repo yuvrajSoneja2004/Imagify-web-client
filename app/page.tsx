@@ -22,15 +22,15 @@ export default function HomePage() {
     userId: string;
   }
 
-  const getUserInfo = async (token: TokenObject) => {
-    try {
-      const { data } = await axios.get(`/api/getuserinfo?id=${token.userId}`);
+   const getUserInfo = async (token: TokenObject) => {
+     try {
+       const { data } = await axios.get(`/api/getuserinfo?id=${token.userId}`);
 
-      if (data?.res) {
-        storeUserInfo(login(data?.info));
-      }
-    } catch (error) {}
-  };
+       if (data?.res) {
+         storeUserInfo(login(data?.info));
+       }
+     } catch (error) {}
+   };
 
   const storedToken = localStorage.getItem('token');
 

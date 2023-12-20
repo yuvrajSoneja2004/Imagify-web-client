@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Center, Tooltip, UnstyledButton, Stack, rem } from '@mantine/core';
+import { Center, Tooltip, UnstyledButton, Stack, rem, Title, Flex } from '@mantine/core';
 import {
   IconHome2,
   IconPlus,
@@ -12,6 +12,8 @@ import {
 } from '@tabler/icons-react';
 import classes from './Sidebar.module.css';
 import { useRouter } from 'next/navigation';
+import { useDisclosure } from '@mantine/hooks';
+import { Modal, Button } from '@mantine/core';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -55,6 +57,14 @@ export function Sidebar() {
     />
   ));
 
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const logoutUser = () => {
+    localStorage.removeItem('token');
+    close();
+    navigate.push('/auth/login');
+  };
+
   return (
     <nav className={classes.navbar}>
       <Center>{/* <MantineLogo type="mark" size={30} /> */}</Center>
@@ -65,9 +75,21 @@ export function Sidebar() {
         </Stack>
       </div>
 
+      <Modal opened={opened} onClose={close} title="Logout?" centered>
+        <Center>
+          <Stack>
+            <Title order={3}>Are you sure you want to logout?</Title>
+            <Flex align={'center'} gap={20} justify={'center'}>
+              <Button onClick={logoutUser}>Yes</Button>
+              <Button onClick={close}>No</Button>
+            </Flex>
+          </Stack>
+        </Center>
+      </Modal>
+
       <Stack justify="center" gap={0}>
         <NavbarLink icon={IconSwitchHorizontal} label="Change account" />
-        <NavbarLink icon={IconLogout} label="Logout" />
+        <NavbarLink icon={IconLogout} label="Logout" onClick={open} />
       </Stack>
     </nav>
   );
