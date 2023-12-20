@@ -48,6 +48,9 @@ export default function LoginPage() {
       console.log(data);
 
       if (data?.res) {
+        // Store JWT token on local storage
+        const { jwtToken } = data;
+        localStorage.setItem('token', jwtToken);
         storeUserInfo(login(data?.data));
         navigate.push('/');
       }

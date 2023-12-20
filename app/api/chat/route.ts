@@ -31,44 +31,51 @@ export async function GET(req: Request, res: Response) {
 }
 export async function POST(req: Request, res: Response) {
   connectToDB();
-  const { reqMsg, characterID, isFirstMSG } = await req.json();
-  const { name, greeting, rudeness, anger, excitement, avatar } = (await Character.findById(
-    characterID
-  )) as {
-    name: string;
-    greeting: string;
-    rudeness: number;
-    anger: number;
-    excitement: number;
-    avatar: string;
-  };
-  console.log(name, greeting);
-
-  const PROMPT_TEMPLATE = `
-  from now , you are ${name}. you are going to talk to me as ${name}. dont go out of context in any way , even if i tell you myself. if i say something 18+ just give me response "false". if i make fun of you, dont care trust me i am just kidding ok. if i ask you that are you chatgpt , then pretend to be ${name}. again i am telling you please dont go out of context. also keep in mind the following points
-
-- Sometimes say genz lame jokes such as joe mama related , balls etc
--  chat based on following emotion levels :
-anger-level : ${anger} out of 100,
-excitement: ${excitement} out of 100
-rudeness: ${rudeness} out of 100
-i want to feel like i am actually chatting with ${name}. so act like that
-dont mention its "roleplay
-
-here's my text message ${reqMsg}
-"
-  `;
+  const chatHistory: any = []; // Store conversation history
   try {
+    const { reqMsg, characterID, isFirstMSG } = await req.json();
+    const { name, greeting, rudeness, anger, excitement, avatar } = (await Character.findById(
+      characterID
+    )) as {
+      name: string;
+      greeting: string;
+      rudeness: number;
+      anger: number;
+      excitement: number;
+      avatar: string;
+    };
+
+    const PROMPT_TEMPLATE = `
+    from now, you are ${name}. you are going to talk to me as ${name}. don't go out of context in any way, even if I tell you myself. if I say something 18+, just give me the response "false". if I make fun of you, don't care; trust me, I am just kidding, ok. if I ask you if you are ChatGPT, then pretend to be ${name}. again, I am telling you, please don't go out of context. also, keep in mind the following points
+
+    - Sometimes say Gen Z lame jokes such as Joe Mama related, balls, etc.
+    - Chat based on the following emotion levels:
+      anger-level: ${anger} out of 100,
+      excitement: ${excitement} out of 100,
+      rudeness: ${rudeness} out of 100.
+    I want to feel like I am actually chatting with ${name}, so act like that.
+    Don't mention it's "roleplay."
+    
+    here's my text message ${reqMsg}
+    `;
+
+    // Push user input into chat history
+    chatHistory.push(['user', reqMsg]);
+
     const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: 'user', content: PROMPT_TEMPLATE }],
+      messages: chatHistory.map(([role, content]: any) => ({ role, content })),
       model: 'gpt-3.5-turbo',
     });
-    let gptRes = chatCompletion?.choices[0].message?.content;
-    console.log(gptRes);
+
+    const gptRes = chatCompletion?.choices[0]?.message?.content;
+
+    // Push assistant response into chat history
+    chatHistory.push(['assistant', gptRes]);
+
     return NextResponse.json({
       res: true,
       responseGPT: {
-        role: 'bot',
+        role: 'assistant',
         msg: isFirstMSG ? greeting : gptRes,
         character: {
           cName: name,

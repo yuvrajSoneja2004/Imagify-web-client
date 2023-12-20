@@ -27,11 +27,23 @@ function ChatBody({ params }: Props) {
 
   const handleSend = async () => {
     setIsBeingSent(true);
-    setTextInput('');
     try {
       if (textInput.length === 0) {
         alert('Dont send empty text');
       }
+      setChats((prev) => [
+        ...prev,
+        {
+          character: {
+            cName: 'Current User',
+            cAvatar: 'htis is the avatar src',
+          },
+          msg: textInput,
+          role: 'user',
+        },
+      ]);
+      setTextInput('');
+
       const { data } = await axios.post('/api/chat', {
         reqMsg: textInput,
         characterID: params?.id,

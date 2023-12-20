@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import { connectToDB } from '@/lib/connect-db';
 import { readImg } from '@/lib/static/readImg';
+import jwt from 'jsonwebtoken';
 
 connectToDB();
 export async function POST(req: Request, res: Response) {
@@ -36,12 +37,20 @@ export async function POST(req: Request, res: Response) {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (isPasswordValid) {
-      console.log('Password is valid');
+      // Generate JWT token
+      const token = jwt.sign(
+        { userId: user._id, username: user.username, useravatar: user.avatarUrl },
+        '1q2w3e4r5t',
+        {
+          expiresIn: '1h',
+        }
+      );
       return NextResponse.json(
         {
           res: true,
           data: user,
           base: readImg(),
+          jwtToken: token,
         },
         { status: 200 }
       );

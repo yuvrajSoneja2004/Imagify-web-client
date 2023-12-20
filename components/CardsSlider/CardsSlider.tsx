@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import RecentChat from '../RecentChat/RecentChat';
-import { Box, Flex, Text, rem, useMantineTheme } from '@mantine/core';
+import { Box, Flex, Grid, Text, rem, useMantineTheme } from '@mantine/core';
 import CharacterCard from '../CharacterCard/CharacterCard';
 import ContinueChatSkeletion from '../SkeletonLoaders/ContinueChatSkeleton/ContinueChatSkeleron';
 import axios from 'axios';
@@ -76,7 +76,7 @@ function CardsCarousel() {
       <Text fw={500} lts={0.2} mb={20} mt={20}>
         Recommended
       </Text>
-      <div>
+      <Grid>
         {isLoading
           ? LOADER_ARRAY.map((_, index) => (
               <Box pl={10} pr={10}>
@@ -84,7 +84,7 @@ function CardsCarousel() {
               </Box>
             ))
           : data.map((item, index) => <CharacterCard info={item} />)}
-      </div>
+      </Grid>
     </Box>
   );
 }

@@ -32,7 +32,7 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 }
 
 const mockdata = [
-  { icon: IconHome2, label: 'Home', route: '/' },
+  { icon: IconHome2, label: 'Home', route: '/characters' },
   { icon: IconListDetails, label: 'Feed', route: '/feed' },
   { icon: IconPlus, label: 'Create', route: '/createBot' },
   { icon: IconMessages, label: 'Chats', route: '/recentchats' },
