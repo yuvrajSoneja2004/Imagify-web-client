@@ -1,23 +1,46 @@
 'use client';
 import { Center, Container } from '@mantine/core';
-import React from 'react';
-import html2canvas from 'html2canvas';
+import React, { useEffect, useState } from 'react';
 import FeedCard from '@/components/FeedCard/FeedCard';
+import axios from 'axios';
 
 function page() {
-  const captureConversation = async () => {
-    const conversationElement = document.getElementById('conversation'); // Replace 'conversation' with the actual ID or class of your conversation container
-    const canvas = await html2canvas(conversationElement as HTMLElement);
-    const conversationImage = canvas.toDataURL('image/png');
-    // Now, you can send conversationImage to your back end or use it as needed
-    console.log('first', conversationImage);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [posts, setPosts] = useState([]);
+  const getPosts = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.get('/api/getPosts');
+      setPosts(data);
+      console.log(data, 'god of war');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  useEffect(() => {
+    getPosts();
+  }, []);
   return (
     <Container mt={20}>
       <Center>
-        <div id="conversation">
-          <FeedCard />
+        <div>
+          {isLoading
+            ? 'Loading....'
+            : posts.map((post, index) => (
+                <FeedCard
+                  key={index}
+                  userName={post?.userName}
+                  userProfile={post?.userProfilePic}
+                  daysAgo={post?.createdAt}
+                  likes={post?.likes}
+                  postConversation={post?.conversation}
+                  postDesc={post?.postDesc}
+                  feedId={post?._id}
+                />
+              ))}
         </div>
       </Center>
     </Container>

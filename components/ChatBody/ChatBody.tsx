@@ -1,10 +1,12 @@
 'use client';
 import { useChatScroll } from '@/hooks/useChatScroll';
+import { addMessage, clearConversation } from '@/redux/features/currentConversation';
 import { ActionIcon, Avatar, Box, Flex, Stack, Text, TextInput, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconArrowRight, IconSend, IconSendOff } from '@tabler/icons-react';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 type Props = {
   params: {
@@ -18,6 +20,7 @@ function ChatBody({ params }: Props) {
   const [chats, setChats] = useState([]);
   const [isFirstMessage, setIsFirstMessage] = useState<boolean>(true);
   const ref = useChatScroll(chats);
+  const dispatch = useDispatch();
 
   const checkEnterKey = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -27,6 +30,17 @@ function ChatBody({ params }: Props) {
 
   const handleSend = async () => {
     setIsBeingSent(true);
+    // Storing to global
+    dispatch(
+      addMessage({
+        character: {
+          cName: 'Current User',
+          cAvatar: 'htis is the avatar src',
+        },
+        msg: textInput,
+        role: 'user',
+      })
+    );
     try {
       if (textInput.length === 0) {
         alert('Dont send empty text');
@@ -54,16 +68,35 @@ function ChatBody({ params }: Props) {
         const { responseGPT } = data;
         console.log(responseGPT);
         setChats((prev) => [...prev, responseGPT]);
+        dispatch(addMessage(responseGPT));
       }
     } catch (error) {
+      console.log(error);
     } finally {
       setIsBeingSent(false);
     }
   };
 
+  useEffect(() => {
+    return () => {
+      // Cleanup function to be called when the component unmounts
+      dispatch(clearConversation());
+
+      console.log('jagan ');
+      // axiosInstance
+      //   .post("/clearHistory")
+      //   .then((response) => {
+      //     console.log(response.data.msg);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error clearing conversation history:", error);
+      //   });
+    };
+  }, []);
+
   return (
     <Box ref={ref}>
-      <Stack mt={15} h={400} style={{ overflowY: 'scroll' }} gap={30}>
+      <Stack mt={15} h={400} style={{ overflowY: 'scroll' }} gap={30} id="conversation">
         {chats.map((chat, index) => {
           const {
             msg,

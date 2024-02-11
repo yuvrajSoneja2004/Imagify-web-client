@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './features/authSlice';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import currentConversation from './features/currentConversation';
 
 export const store = configureStore({
   reducer: {
     authSlice,
+    currentConversation,
   },
 });
 

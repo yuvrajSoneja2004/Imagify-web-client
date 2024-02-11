@@ -10,6 +10,7 @@ type AuthState = {
   username: string;
   avatarURI: string;
   recentChats: any[];
+  email: string;
 };
 
 let initialState = {

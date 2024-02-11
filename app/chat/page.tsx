@@ -202,6 +202,7 @@ function ChatPage({ searchParams }: Props) {
         {/* Share and Chat options Section */}
         <Flex align={'center'} gap={10}>
           <IconShare size={20} onClick={open} cursor={'pointer'} />
+          {/* Transfering Chat info to ChatOptions so that feedModel can access  */}
           <Chatoptions />
         </Flex>
       </Flex>
