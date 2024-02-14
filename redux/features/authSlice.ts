@@ -32,7 +32,7 @@ export const auth = createSlice({
   initialState,
   reducers: {
     login(state, action) {
-      console.log('this is payload', action.payload);
+      // console.log('this is payload', action.payload);
       const { _id, username, followers, following, bio, email, recentChats } = action.payload;
       return {
         value: {

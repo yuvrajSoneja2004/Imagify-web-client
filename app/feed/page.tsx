@@ -1,8 +1,9 @@
 'use client';
-import { Center, Container } from '@mantine/core';
+import { Box, Center, Container, Flex } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import FeedCard from '@/components/FeedCard/FeedCard';
 import axios from 'axios';
+import FeedCardPlaceHolder from '@/components/LoadingPlaceholders/FeedCardPH';
 
 function page() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,9 +27,9 @@ function page() {
   return (
     <Container mt={20}>
       <Center>
-        <div>
+        <Flex w={'100%'} direction={'column'} gap={20}>
           {isLoading
-            ? 'Loading....'
+            ? Array.from({ length: 10 }, (_, index) => <FeedCardPlaceHolder key={index} />)
             : posts.map((post, index) => (
                 <FeedCard
                   key={index}
@@ -39,9 +40,10 @@ function page() {
                   postConversation={post?.conversation}
                   postDesc={post?.postDesc}
                   feedId={post?._id}
+                  feedComments={post?.comments}
                 />
               ))}
-        </div>
+        </Flex>
       </Center>
     </Container>
   );

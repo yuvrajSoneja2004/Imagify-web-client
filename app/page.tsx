@@ -5,11 +5,12 @@ import { Box, Text } from '@mantine/core';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 export default function HomePage() {
   const l = useAppSelector((s) => s.authSlice.value);
-  console.log(l, 'nang');
+
   const storeUserInfo = useDispatch();
   const navigate = useRouter();
   interface JWType {
@@ -22,15 +23,15 @@ export default function HomePage() {
     userId: string;
   }
 
-   const getUserInfo = async (token: TokenObject) => {
-     try {
-       const { data } = await axios.get(`/api/getuserinfo?id=${token.userId}`);
+  const getUserInfo = async (token: TokenObject) => {
+    try {
+      const { data } = await axios.get(`/api/getuserinfo?id=${token.userId}`);
 
-       if (data?.res) {
-         storeUserInfo(login(data?.info));
-       }
-     } catch (error) {}
-   };
+      if (data?.res) {
+        storeUserInfo(login(data?.info));
+      }
+    } catch (error) {}
+  };
 
   const storedToken = localStorage.getItem('token');
 
@@ -41,6 +42,10 @@ export default function HomePage() {
   } else {
     navigate.push('/auth/login');
   }
+
+  useEffect(() => {
+    console.log(l, 'nang');
+  }, [l]);
 
   return (
     <Box h={'100vh'} pl={20} pr={20} pt={20}>

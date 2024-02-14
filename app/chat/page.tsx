@@ -49,6 +49,7 @@ function ChatPage({ searchParams }: Props) {
   const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false);
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
   const [clientSideLikes, setClientSideLikes] = useState([]);
+  const [isDataRecieved, setIsDataRecieved] = useState<boolean>(false);
 
   const userID = useAppSelector((state) => state.authSlice.value.userid);
 
@@ -61,6 +62,7 @@ function ChatPage({ searchParams }: Props) {
         const { charData } = data;
         setClientSideLikes(charData?.likes?.length);
         setCharacterInfo(charData);
+        setIsDataRecieved(true);
       }
 
       console.log(data);
@@ -121,9 +123,11 @@ function ChatPage({ searchParams }: Props) {
   // useEffect hook to fetch data on component mount
   useEffect(() => {
     getData();
-    addView();
+    if (isDataRecieved) {
+      addView();
+    }
     addHistory();
-  }, [searchParams?.id]);
+  }, [searchParams?.id, isDataRecieved]);
 
   // return loading component if server is yet to respond
   if (isLoading) {

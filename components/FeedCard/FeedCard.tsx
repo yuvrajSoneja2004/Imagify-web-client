@@ -1,10 +1,12 @@
 'use client';
 import { useAppSelector } from '@/redux/store';
 import { Avatar, Button, Card, Image, Title, Text, Group, Container } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconHeart, IconShare, IconMessageCircle, IconHeartFilled } from '@tabler/icons-react';
 import axios from 'axios';
 
 import React, { useState } from 'react';
+import CommentsDrawer from '../CommentsDrawer/CommentsDrawer';
 
 interface FeedCardProps {
   userProfile: string;
@@ -14,6 +16,7 @@ interface FeedCardProps {
   likes: [];
   postDesc: string;
   feedId: string;
+  feedComments: [];
 }
 
 const FeedCard: React.FC<FeedCardProps> = ({
@@ -24,6 +27,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
   likes,
   postDesc,
   feedId,
+  feedComments,
 }) => {
   // Dummy data for the feed card
   const feedData = {
@@ -39,21 +43,27 @@ const FeedCard: React.FC<FeedCardProps> = ({
   const { userid, email } = useAppSelector((state) => state.authSlice.value);
 
   const [tempLikes, setTempLikes] = useState(likes.length);
-  const [tempHasLiked, setTempHasLiked] = useState(likes.includes(userid));
+  const [tempHasLiked, setTempHasLiked] = useState(likes.includes(email));
+  const [comments, setComments] = useState();
 
   console.log('Ekda ekda', userid);
 
   const handleLike = async () => {
     try {
-      const { data } = await axios.post(`/api/likeFeed/${feedId}`, {
+      const { data } = await axios.post(`/api/likeFeed`, {
+        feedId,
         email,
       });
       if (!tempHasLiked) {
         setTempHasLiked(true);
       }
-      if (data?.res) {
+      if (data) {
         setTempLikes((prev) => prev + 1);
         // TODO: Toast here
+        notifications.show({
+          title: 'Liked Successfully',
+          message: 'Hey there, your code is awesome! 🤥',
+        });
       }
     } catch (error) {
       console.log(error);
@@ -62,7 +72,8 @@ const FeedCard: React.FC<FeedCardProps> = ({
 
   const handleUnlike = async () => {
     try {
-      const { data } = await axios.post(`/api/unlikeFeed/${feedId}`, {
+      const { data } = await axios.post(`/api/unlikeFeed`, {
+        feedId,
         currentUserE: email,
       });
       if (tempHasLiked) {
@@ -105,18 +116,17 @@ const FeedCard: React.FC<FeedCardProps> = ({
             !tempHasLiked ? (
               <IconHeart size={18} onClick={handleLike} />
             ) : (
-              <IconHeartFilled size={18} />
+              <IconHeartFilled size={18} onClick={handleUnlike} />
             )
           }
         >
-          {likes.length}
+          {tempLikes}
         </Button>
-        <Button color="gray" leftSection={<IconShare size={18} />}>
+        {/* <Button color="gray" leftSection={<IconShare size={18} />}>
           {feedData.shares}
-        </Button>
-        <Button color="gray" leftSection={<IconMessageCircle size={18} />}>
-          {feedData.comments}
-        </Button>
+        </Button> */}
+        {/* Comments */}
+        <CommentsDrawer noOfComments={feedData?.comments} comments={feedComments} feedId={feedId} />
       </Group>
     </Card>
   );
