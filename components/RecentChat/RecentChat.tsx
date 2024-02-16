@@ -2,7 +2,7 @@
 import React from 'react';
 import S from './RecentChat.module.css';
 import Image from 'next/image';
-import { Text } from '@mantine/core';
+import { Text, useComputedColorScheme } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/redux/store';
 
@@ -19,6 +19,8 @@ type Props = {
 };
 
 function RecentChat({ info }: Props) {
+  const colorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
+
   const navigate = useRouter();
   const {
     _id,
@@ -30,7 +32,11 @@ function RecentChat({ info }: Props) {
   return (
     <div
       className={S.card}
-      style={{ cursor: 'pointer' }}
+      style={{
+        cursor: 'pointer',
+        backgroundColor: colorScheme == 'dark' ? '#393B3B' : '#fff',
+        boxShadow: colorScheme == 'dark' ? '' : 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
+      }}
       onClick={() => {
         navigate.push(`/chat?id=${_id}`);
       }}

@@ -38,10 +38,12 @@
     "openai": "^4.21.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-elastic-carousel": "^0.11.5",
     "react-loading-skeleton": "^3.3.1",
     "react-redux": "^9.0.3",
     "react-responsive-carousel": "^3.2.23",
-    "react-slick": "^0.29.0"
+    "react-slick": "^0.29.0",
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",

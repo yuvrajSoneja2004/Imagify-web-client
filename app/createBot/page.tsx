@@ -98,7 +98,7 @@ function CharacterCreationPage({}: Props) {
 
       // Redirect on success
       if (data?.res) {
-        navigate.push('/');
+        navigate.push('/characters');
       }
     } catch (error) {
       console.error(error);

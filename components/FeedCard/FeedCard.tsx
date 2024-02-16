@@ -1,6 +1,16 @@
 'use client';
 import { useAppSelector } from '@/redux/store';
-import { Avatar, Button, Card, Image, Title, Text, Group, Container } from '@mantine/core';
+import {
+  Avatar,
+  Button,
+  Card,
+  Image,
+  Title,
+  Text,
+  Group,
+  Container,
+  useComputedColorScheme,
+} from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconHeart, IconShare, IconMessageCircle, IconHeartFilled } from '@tabler/icons-react';
 import axios from 'axios';
@@ -39,6 +49,8 @@ const FeedCard: React.FC<FeedCardProps> = ({
     shares: 18,
     comments: 7,
   };
+
+  const colorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
 
   const { userid, email } = useAppSelector((state) => state.authSlice.value);
 
@@ -108,23 +120,29 @@ const FeedCard: React.FC<FeedCardProps> = ({
       {/* Post Image */}
       <Image src={feedData.image} alt="Post Image" style={{ marginTop: 10, marginBottom: 10 }} />
 
-      {/* Like, Share, Comment Buttons */}
+      {/* Like, Comment Buttons */}
       <Group>
         <Button
-          color="gray"
+          variant="transparent"
+          color={colorScheme == 'dark' ? '#ffffff' : '#000'}
           leftSection={
             !tempHasLiked ? (
-              <IconHeart size={18} onClick={handleLike} />
+              <IconHeart
+                size={18}
+                onClick={handleLike}
+                color={colorScheme == 'dark' ? '#ffffff' : '#000'}
+              />
             ) : (
-              <IconHeartFilled size={18} onClick={handleUnlike} />
+              <IconHeartFilled
+                size={18}
+                onClick={handleUnlike}
+                color={colorScheme == 'dark' ? '#ffffff' : '#000'}
+              />
             )
           }
         >
           {tempLikes}
         </Button>
-        {/* <Button color="gray" leftSection={<IconShare size={18} />}>
-          {feedData.shares}
-        </Button> */}
         {/* Comments */}
         <CommentsDrawer noOfComments={feedData?.comments} comments={feedComments} feedId={feedId} />
       </Group>

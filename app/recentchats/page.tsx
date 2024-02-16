@@ -1,6 +1,6 @@
 'use client';
 import { useAppSelector } from '@/redux/store';
-import { Avatar, Box, Button, Flex, Stack, Text } from '@mantine/core';
+import { Avatar, Box, Button, Flex, Stack, Text, useComputedColorScheme } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import axios from 'axios';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ type Props = {};
 function page({}: Props) {
   const userID = useAppSelector((state) => state.authSlice.value.userid);
   const [historyList, setHistoryList] = useState([]);
+  const colorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
 
   const getHistory = async () => {
     try {
@@ -45,8 +46,12 @@ function page({}: Props) {
           : historyList.map((profile: { charId: string }, index) => {
               return (
                 <Link
+                  key={index}
                   href={`/chat?id=${profile?.charId}`}
-                  style={{ textDecoration: 'none', color: '#fff' }}
+                  style={{
+                    textDecoration: 'none',
+                    color: colorScheme === 'dark' ? '#ffffff' : '#000000',
+                  }}
                 >
                   <Flex align={'start'} gap={10}>
                     <Avatar size={55} src={profile?.charAvatar} />

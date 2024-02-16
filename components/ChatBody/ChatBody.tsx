@@ -3,6 +3,7 @@ import { useChatScroll } from '@/hooks/useChatScroll';
 import { addMessage, clearConversation } from '@/redux/features/currentConversation';
 import { ActionIcon, Avatar, Box, Flex, Stack, Text, TextInput, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 import { IconArrowRight, IconSend, IconSendOff } from '@tabler/icons-react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -64,6 +65,16 @@ function ChatBody({ params }: Props) {
         isFirstMSG: isFirstMessage,
       });
       if (data?.res) {
+        // Curse detection
+        const endDetectionRx = /{false}/g;
+
+        if (endDetectionRx.test(data?.msg?.toLowerCase())) {
+          console.log('Saale gali mat de');
+          notifications.show({
+            title: 'Cursing is not allowed!',
+            message: 'Hey there, your code is awesome! 🤥',
+          });
+        }
         setIsFirstMessage(false);
         const { responseGPT } = data;
         console.log(responseGPT);
@@ -71,7 +82,7 @@ function ChatBody({ params }: Props) {
         dispatch(addMessage(responseGPT));
       }
     } catch (error) {
-      console.log(error);
+      console.log(error, 'chaterror');
     } finally {
       setIsBeingSent(false);
     }

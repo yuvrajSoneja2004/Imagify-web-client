@@ -1,6 +1,6 @@
 import '@mantine/core/styles.css';
 import React from 'react';
-import { MantineProvider, ColorSchemeScript, Notification } from '@mantine/core';
+import { MantineProvider, ColorSchemeScript, useThe } from '@mantine/core';
 import { theme } from '../theme';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { Navbar } from '@/components/Navbar/Navbar';
@@ -8,9 +8,11 @@ import S from './global.module.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '@mantine/notifications/styles.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { ReduxProvider } from '@/redux/features/provider'
+import { ReduxProvider } from '@/redux/features/provider';
 import '@mantine/carousel/styles.css';
 import { Notifications } from '@mantine/notifications';
+import AuthCheck from '@/components/authCheck';
+
 export const metadata = {
   title: 'Imagify - Talk to anyone!',
   description: 'Inspired by https://beta.character.ai/',
@@ -31,18 +33,18 @@ export default function RootLayout({ children }: { children: any }) {
         <div id="rootGrid">
           <ReduxProvider>
             <MantineProvider theme={theme}>
-              {/* // TODO: Notifications component is not being showed on form handling FILE:  app/auth/register
-               */}
-              <Notifications />
-              <div className={S.grid}>
-                <div className={S.sidebar}>
-                  <Sidebar />
+              <AuthCheck>
+                <Notifications />
+                <div className={S.grid}>
+                  <div className={S.sidebar}>
+                    <Sidebar />
+                  </div>
+                  <div>
+                    <Navbar />
+                    {children}
+                  </div>
                 </div>
-                <div>
-                  <Navbar />
-                  {children}
-                </div>
-              </div>
+              </AuthCheck>
             </MantineProvider>
           </ReduxProvider>
         </div>

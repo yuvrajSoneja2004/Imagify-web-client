@@ -1,6 +1,14 @@
 'use client';
 import { useDisclosure } from '@mantine/hooks';
-import { Drawer, Button, Flex, Input, ScrollArea, Loader } from '@mantine/core';
+import {
+  Drawer,
+  Button,
+  Flex,
+  Input,
+  ScrollArea,
+  Loader,
+  useComputedColorScheme,
+} from '@mantine/core';
 import { IconMessageCircle, IconSend } from '@tabler/icons-react';
 import CommentCard from '../CommentRow/CommentRow';
 import { useState } from 'react';
@@ -12,6 +20,8 @@ function CommentsDrawer({ noOfComments, comments, feedId }: any) {
   const [opened, { open, close }] = useDisclosure(false);
   const [isBeingPosted, setisBeingPosted] = useState(false);
   const [input, setInput] = useState('');
+  const colorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
+
   console.log('Xaroorat', comments);
   const { username, avatarURI } = useAppSelector((state) => state.authSlice.value);
   const handleKeyPress = (e: any) => {
@@ -87,7 +97,12 @@ function CommentsDrawer({ noOfComments, comments, feedId }: any) {
         </Flex>
       </Drawer>
 
-      <Button color="gray" leftSection={<IconMessageCircle size={18} />} onClick={open}>
+      <Button
+        color={colorScheme == 'dark' ? '#ffffff' : '#000'}
+        variant="transparent"
+        leftSection={<IconMessageCircle size={18} />}
+        onClick={open}
+      >
         {noOfComments}
       </Button>
     </>

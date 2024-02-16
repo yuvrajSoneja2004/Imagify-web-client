@@ -12,6 +12,7 @@ import {
   Avatar,
   Flex,
   Text,
+  useComputedColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './Navbar.module.css';
@@ -26,13 +27,19 @@ export function Navbar() {
 
   // For now
   const username = useAppSelector((state) => state.authSlice.value.username);
+  const colorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
 
   return (
     <Box>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
           <Group h="100%" gap={0} visibleFrom="sm">
-            <Image src="./LOGO.png" alt="lol" width={23} height={23} />
+            <Image
+              src={colorScheme == 'dark' ? './LOGO.png' : './inverted_logo.png'}
+              alt="lol"
+              width={23}
+              height={23}
+            />
           </Group>
           <Flex visibleFrom="sm" align={'center'} justify={'center'} gap={30}>
             <Link href={'/search'}>
