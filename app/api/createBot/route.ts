@@ -29,12 +29,21 @@ export async function GET(req: Request, res: Response) {
 
 export async function POST(req: Request, res: Response) {
   // Extrating info from request body
-  const { name, intro, avatar, anger, rudeness, kindness, excitement, createdBy } =
+  const { name, intro, avatar, anger, rudeness, kindness, excitement, createdBy, category } =
     await req.json();
   console.log('got hit bro');
   try {
     // Checking if all required parameters are passed from client
-    if (!name || !intro || !anger || !rudeness || !kindness || !excitement || !createdBy) {
+    if (
+      !name ||
+      !intro ||
+      !anger ||
+      !rudeness ||
+      !kindness ||
+      !excitement ||
+      !createdBy ||
+      !category
+    ) {
       return NextResponse.json(
         {
           res: false,
@@ -50,6 +59,7 @@ export async function POST(req: Request, res: Response) {
       avatar,
       anger,
       rudeness,
+      category,
       kindness,
       excitement,
       createdBy,

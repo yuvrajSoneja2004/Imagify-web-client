@@ -11,13 +11,14 @@ import classes from './CardsSlider.module.css';
 import { useMediaQuery } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
 import Carousel from 'react-elastic-carousel'
-
+import { useAppSelector } from '@/redux/store';
 
 function CardsCarousel() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useRouter();
-
+  const { recentChats } = useAppSelector((state) => state.authSlice.value);
+  console.log('Amaku side diyo re re ', recentChats);
   const getData = async () => {
     setIsLoading(true);
     try {
@@ -49,7 +50,7 @@ function CardsCarousel() {
         onClick={onClick}
         disabled={isEdge}
         style={{
-          color: arrowColor ,
+          color: arrowColor,
           background: 'none',
           border: 'none',
           cursor: 'pointer',
@@ -104,7 +105,8 @@ function CardsCarousel() {
                 <ContinueChatSkeletion />
               </Box>
             ))
-          : data.map((item, index) => (
+          : // here
+            recentChats.map((item, index) => (
               <div key={index}>
                 <RecentChat info={item} />
               </div>

@@ -13,13 +13,21 @@ type Props = {
   params: {
     id: number;
   };
+  characterInfo: [];
 };
 
-function ChatBody({ params }: Props) {
+function ChatBody({ params, characterInfo }: Props) {
   const [textInput, setTextInput] = useState<String>('');
   const [isBeingSent, setIsBeingSent] = useState<boolean>(false);
   const [chats, setChats] = useState([]);
   const [isFirstMessage, setIsFirstMessage] = useState<boolean>(true);
+  const [history, setHistory] = useState([
+    {
+      role: 'system',
+      content: 'Heelo',
+    },
+  ]);
+  console.log('Cocktail', characterInfo);
   const ref = useChatScroll(chats);
   const dispatch = useDispatch();
 
@@ -31,6 +39,7 @@ function ChatBody({ params }: Props) {
 
   const handleSend = async () => {
     setIsBeingSent(true);
+    setHistory((prev) => [...prev, { role: 'user', content: textInput }]);
     // Storing to global
     dispatch(
       addMessage({
@@ -57,12 +66,22 @@ function ChatBody({ params }: Props) {
           role: 'user',
         },
       ]);
-      setTextInput('');
+      //   const PROMPT_TEMPLATE = `
+      //   from now, you are ${name}. you are going to talk to me as ${name}. don't go out of context in any way, even if I tell you myself. if I say something 18+, just give me the response "false". if I make fun of you, don't care; trust me, I am just kidding, ok. if I ask you if you are ChatGPT, then pretend to be ${name}. again, I am telling you, please don't go out of context. also, keep in mind the following points
+      //   - Sometimes say Gen Z lame jokes such as Joe Mama related, balls, etc.
+      //   - Chat based on the following emotion levels:
+      //     anger-level: ${anger} out of 100,
+      //     excitement: ${excitement} out of 100,
+      //     rudeness: ${rudeness} out of 100.
+      //   I want to feel like I am actually chatting with ${name}, so act like that.
+      //   Don't mention it's "roleplay."
+      //   here's my text message ${reqMsg}
+      // `;
 
       const { data } = await axios.post('/api/chat', {
-        reqMsg: textInput,
         characterID: params?.id,
         isFirstMSG: isFirstMessage,
+        history,
       });
       if (data?.res) {
         // Curse detection
@@ -79,6 +98,7 @@ function ChatBody({ params }: Props) {
         const { responseGPT } = data;
         console.log(responseGPT);
         setChats((prev) => [...prev, responseGPT]);
+        setHistory((prev) => [...prev, { role: 'system', content: data?.msg }]);
         dispatch(addMessage(responseGPT));
       }
     } catch (error) {

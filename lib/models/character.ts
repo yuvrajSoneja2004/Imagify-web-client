@@ -32,6 +32,7 @@ const characterSchema = new Schema<ICharacter>({
   kindness: { type: Number, default: 0, required: true },
   excitement: { type: Number, default: 0, required: true },
   createdAt: { type: Date, default: Date.now() },
+  category: { type: String, default: 'General' },
   createdBy: { type: Object, default: {}, required: true },
   likes: { type: Array, default: [] },
   conversationHistory: { type: Array, default: [] },

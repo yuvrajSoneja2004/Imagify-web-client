@@ -212,7 +212,7 @@ function ChatPage({ searchParams }: Props) {
       </Flex>
 
       {/* Chat Body Section */}
-      <ChatBody params={searchParams} />
+      <ChatBody params={searchParams} characterInfo={characterInfo} />
     </Container>
   );
 }

@@ -8,13 +8,9 @@ import { useAppSelector } from '@/redux/store';
 
 type Props = {
   info: {
-    _id: string;
-    name: string;
-    avatar: string;
-    createdBy: {
-      username: string;
-    };
-    likes: number;
+    charId: string;
+    charAvatar: string;
+    charName: string;
   };
 };
 
@@ -22,13 +18,7 @@ function RecentChat({ info }: Props) {
   const colorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
 
   const navigate = useRouter();
-  const {
-    _id,
-    avatar,
-    name,
-    createdBy: { username },
-    likes,
-  } = info;
+  const { charId, charAvatar, charName } = info;
   return (
     <div
       className={S.card}
@@ -38,12 +28,12 @@ function RecentChat({ info }: Props) {
         boxShadow: colorScheme == 'dark' ? '' : 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
       }}
       onClick={() => {
-        navigate.push(`/chat?id=${_id}`);
+        navigate.push(`/chat?id=${charId}`);
       }}
     >
-      <img src={avatar} alt="lol" style={{ borderRadius: '15px' }} />
+      <img src={charAvatar} alt="lol" style={{ borderRadius: '15px' }} />
       <Text fw={700} mt={7}>
-        {name}
+        {charName}
       </Text>
     </div>
   );

@@ -11,6 +11,7 @@ import {
   Center,
   FileInput,
   Flex,
+  Select,
   Slider,
   Stack,
   Text,
@@ -20,6 +21,7 @@ import {
 } from '@mantine/core';
 
 import {
+  IconCategory,
   IconCircleCheck,
   IconCirclesRelation,
   IconHandRock,
@@ -72,6 +74,7 @@ function CharacterCreationPage({}: Props) {
       // Extracting form data
       const formData = new FormData(event.currentTarget);
       const name: string | null = formData.get('character-name') as string | null;
+      const category: string | null = formData.get('character-category') as string | null;
       const intro: string | null = formData.get('character-intro') as string | null;
       const avatar: File | null = formData.get('character-avatar') as File | null;
       const anger: string | null = formData.get('character-anger') as string | null;
@@ -87,6 +90,7 @@ function CharacterCreationPage({}: Props) {
       // Sending data to server
       const { data } = await axios.post('/api/createBot', {
         name,
+        category,
         intro,
         avatar: await convertFileToBase64(avatar as File),
         anger,
@@ -140,6 +144,23 @@ function CharacterCreationPage({}: Props) {
             The name of the character you want to create.
           </Text>
           <TextInput placeholder="eg: Saitama" name="character-name" required />
+        </Box>
+        {/* Category Selection */}
+        <Box mt={40}>
+          <Flex align={'center'} gap={8}>
+            <Center w={40} h={40} bg={'#2C3C49'} style={{ borderRadius: '7px' }}>
+              <IconCategory size={20} color={'#74C0FC'} />
+            </Center>
+            <Text fw={'bold'}>Category</Text>
+          </Flex>
+          <Text c={'dimmed'} fz={13} mb={5} mt={3}>
+            Select the category of your bot (e.g: Anime)
+          </Text>
+          <Select
+            placeholder="Select category"
+            data={['General', 'Games', 'Celebrity', 'Anime', 'Comedy']}
+            name="character-category"
+          />
         </Box>
 
         {/* Greeting Input */}
