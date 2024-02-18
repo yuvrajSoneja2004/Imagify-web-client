@@ -10,10 +10,6 @@ export async function GET(req: Request, res: Response) {
     const user = await UserModel.find({ _id: id });
     console.log('first', user);
 
-    // Bypassing some values that will not be sent to the client
-    user.password = null;
-    user.recentChats = null;
-
     if (!user) {
       return NextResponse.json(
         {
