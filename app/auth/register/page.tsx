@@ -26,7 +26,7 @@ export default function RegisterPage() {
     event.preventDefault();
     setSpinner(true);
     try {
-      const formData = new FormData(event.currentTarget);
+      const formData = new FormData(event.currentTarget as HTMLFormElement | undefined);
       const username: string | null = formData.get('user-name') as string | null;
       const email: string | null = formData.get('user-email') as string | null;
       const password: string | null = formData.get('user-password') as string | null;
