@@ -9,7 +9,7 @@ export async function GET(req: Request, res: Response) {
 
     const results = await Character.find({
       // Use a regular expression to perform a case-insensitive search
-      name: { $regex: new RegExp(query, 'i') },
+      name: { $regex: new RegExp(query as any, 'i') },
     });
 
     if (results.length === 0) {
